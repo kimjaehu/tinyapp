@@ -10,8 +10,17 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
+    <header>
+        <% include ./partials/_header %>
+    </header>
+    <h3>Create TinyURL</h3>
+    <h3>
+      My URLs
+    </h3>
+    <ul>
     <% for (var url in urls){%>
-        <li><a href='#'><%= `URL: ${urls[url]}, Shortened form: ${url}` %></a></li>
+        <li><a href="/urls/<%= url %>"><b><%= `${url}:` %></b><%= ` ${urls[url]}` %></a></li>
     <% } %>
+    </ul>
 </body>
 </html>
