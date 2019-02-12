@@ -1,10 +1,12 @@
 let express = require("express");
 let app = express();
 const PORT = 8080;
+// let bodyParser = require( "body-parser" );
 
 app.set("view engine", "ejs");
+// app.use( bodyParser.urlencoded( { extended : true } ) );
 
-const urlDatabase = {
+let urlDatabase = {
     "b2xVn2": "http://www.lighthouselabs.ca",
     "9sm5xK": "http://www.google.com"
 }
@@ -18,7 +20,12 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/hello", (req, res) => {
-    res.send("<html><body>Helo <b>World</b></body></html>\n")
+    res.send("<html><body>Helo <b>World</b></body></html>\n");
+});
+
+app.get("/urls", (req, res) => {
+    let templateVars = { urls: urlDatabase};
+    res.render("urls_index", templateVars);
 });
 
 app.listen(PORT, () => {
