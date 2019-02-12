@@ -10,8 +10,7 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
-    <% for (var url in urls){%>
-        <li><a href='#'><%= `URL: ${urls[url]}, Shortened form: ${url}` %></a></li>
-    <% } %>
+        <%= shortURL %>
+        <li><a href="/urls/<%= shortURL %>"></a><%= longURL[shortURL] %></a></li>
 </body>
 </html>
