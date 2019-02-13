@@ -18,9 +18,15 @@
       My URLs
     </h3>
     <ul>
-    <% for (var url in urls){%>
-        <li><a href="/urls/<%= url %>"><b><%= `${url}:` %></b><%= ` ${urls[url]}` %></a></li>
-    <% } %>
+      <% for (var url in urls){%>
+            <b><%= `${url}:` %></b><a href="<%= ` ${urls[url]}` %>"><%= ` ${urls[url]}` %></a>
+            <a href="/urls/<%= url %>"> edit </a>
+            <form method="POST" action="/urls/<%= url%>/delete">
+              <button type="delete" class="btn btn-secondary">delete
+                  <span class="glyphicon glyphicon-delete"></span>
+              </button>
+            </form>        
+      <% } %>
     </ul>
 </body>
 </html>
