@@ -41,6 +41,12 @@ app.get("/urls/:shortURL", (req, res) => {
     res.render("urls_show", templateVars);
 });
 
+
+app.get("/u/:shortURL", (req, res) => {
+    res.redirect(urlDatabase[req.params.shortURL]);
+    // res.redirect(longURL);
+});
+
 app.post("/urls", (req, res) => {
     //console.log(req.body.longURL);  // Log the POST request body to the console
     //let longURLCreated = req.body.longURL;
@@ -49,13 +55,15 @@ app.post("/urls", (req, res) => {
         longURL = `http://${req.body.longURL}`;
     } else {
         longURL = req.body.longURL;
-    }true
+    }
+    let shortURLCreated =''
     for (key in urlDatabase) {
-        if (urlDatabase.key === longURL) {
-            console.log(`long ${urlDatabase.key}`)
-            let shortURLCreated = key;
+        //console.log(`${urlDatabase[key]} vs ${longURL}`)
+        if (urlDatabase[key] === longURL) {
+            //console.log(`long ${urlDatabase.key}`)
+            shortURLCreated = key;
             existURL += 1;
-            console.log(existURL);
+            //console.log(existURL);
         }
     }
 
@@ -63,15 +71,22 @@ app.post("/urls", (req, res) => {
     shortURLCreated = generateRandomString();
     urlDatabase[shortURLCreated] = longURL;
     }
-    console.log(urlDatabase);
-    res.redirect('urls/' + shortURLCreated)
+    //console.log(urlDatabase);
+    res.redirect('/urls/' + shortURLCreated)
     
 }); 
 
-app.get("/u/:shortURL", (req, res) => {
-    res.redirect(urlDatabase[req.params.shortURL]);
-    // res.redirect(longURL);
+app.post('/urls/:shortURL/delete', (req, res) => {
+    // const found = !((req.params.shortURL) in urlDatabase)
+    // if (!found) {
+    //     return res.status(404).send()
+    // }
+    delete urlDatabase[req.params.shortURL];
+    res.redirect('/urls');
 });
+
+
+
 
 app.listen(PORT, () => {
     console.log(`Example app listening on port ${PORT}!`);
