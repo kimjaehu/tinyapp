@@ -86,7 +86,11 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 });
 
 
-
+app.post('/urls/:shortURL/', (req, res) => {
+    // urlDatabase[req.params.shortURL] = longURL;
+    urlDatabase[req.params.shortURL] = req.body.longURL;
+    res.redirect('/urls')
+})
 
 app.listen(PORT, () => {
     console.log(`Example app listening on port ${PORT}!`);
@@ -96,3 +100,11 @@ function generateRandomString() {
     return Math.random().toString(36).substring(7)
 
 }
+
+// function httpAdd(){
+//     if (!req.body.longURL.includes("http://")){
+//         longURL = `http://${req.body.longURL}`;
+//     } else {
+//         longURL = req.body.longURL;
+//     }
+// }
