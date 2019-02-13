@@ -6,7 +6,7 @@ const bodyParser = require( "body-parser" );
 app.set("view engine", "ejs");
 app.use( bodyParser.urlencoded( { extended : true } ) );
 
-let urlDatabase = {
+const urlDatabase = {
     "b2xVn2": "http://www.lighthouselabs.ca",
     "9sm5xK": "http://www.google.com"
 }
@@ -42,18 +42,35 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-    console.log(req.body.longURL);  // Log the POST request body to the console
-    let shortURLCreated = generateRandomString();
-    // res.send("Ok");         // Respond with 'Ok' (we will replace this)
+    //console.log(req.body.longURL);  // Log the POST request body to the console
+    //let longURLCreated = req.body.longURL;
+    let existURL = 0;
+    if (!req.body.longURL.includes("http://")){
+        longURL = `http://${req.body.longURL}`;
+    } else {
+        longURL = req.body.longURL;
+    }true
+    for (key in urlDatabase) {
+        if (urlDatabase.key === longURL) {
+            console.log(`long ${urlDatabase.key}`)
+            let shortURLCreated = key;
+            existURL += 1;
+            console.log(existURL);
+        }
+    }
 
-    urlDatabase[shortURLCreated] = req.body.longURL;
+    if (existURL === 0) {
+    shortURLCreated = generateRandomString();
+    urlDatabase[shortURLCreated] = longURL;
+    }
     console.log(urlDatabase);
+    res.redirect('urls/' + shortURLCreated)
+    
 }); 
 
 app.get("/u/:shortURL", (req, res) => {
-    const longURL = req.body.longURL;
-    //...
-    res.redirect(longURL);
+    res.redirect(urlDatabase[req.params.shortURL]);
+    // res.redirect(longURL);
 });
 
 app.listen(PORT, () => {
