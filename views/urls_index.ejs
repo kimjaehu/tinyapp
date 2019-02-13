@@ -3,6 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <style> 
+      table#t01, td {
+        padding-right: 20px;
+        padding-left: 20px;
+
+      }
+  
+  </style>
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -17,16 +25,27 @@
     <h3>
       My URLs
     </h3>
-    <ul>
+    <table id="t01">
       <% for (var url in urls){%>
-            <b><%= `${url}:` %></b><a href="<%= ` ${urls[url]}` %>"><%= ` ${urls[url]}` %></a>
+        <tr>
+          <td>
+            <b><%= `${url}:` %></b>
+          </td>
+          <td>
+            <a href="<%= ` ${urls[url]}` %>"><%= ` ${urls[url]}` %></a>
+          </td>
+          <td>
             <a href="/urls/<%= url %>"> edit </a>
+          </td>
+          <td>
             <form method="POST" action="/urls/<%= url%>/delete">
               <button type="delete" class="btn btn-secondary">delete
                   <span class="glyphicon glyphicon-delete"></span>
               </button>
-            </form>        
+            </form>
+          </td>
+        </tr>        
       <% } %>
-    </ul>
+    </table>
 </body>
 </html>

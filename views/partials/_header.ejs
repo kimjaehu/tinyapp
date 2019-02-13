@@ -1,3 +1,20 @@
 <!-- views/partials/_head.ejs -->
 <h1> TinyApp </h1>
 <h6><a href = "/urls/new">Create New TinyURL</a></h6>
+<% if (!username) { %>
+<form class="form-inline" action="/login" method="POST">
+    <div class="form-group mb-2">
+      <label for="username">Username:</label>
+      <input class="form-control" type="text" name="username" placeholder="" style="width: 300px; margin: 1em">
+      <button type="login" class="btn btn-primary">Login</button>
+    </div>
+</form>
+<% } else { %>
+    <form class="form-inline" action="/logout" method="POST">
+        <div class="form-group mb-2">
+            <h5>logged In As: <%= username %></h5>
+
+            <button type="login" class="btn btn-warning">logout</button>
+        </div>
+    </form>
+<% } %>
