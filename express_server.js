@@ -3,6 +3,7 @@ let app = express();
 const PORT = 8080;
 const bodyParser = require( "body-parser" );
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
 
 app.set("view engine", "ejs");
 app.use( bodyParser.urlencoded( { extended : true } ) );
@@ -225,12 +226,15 @@ app.post('/register', (req,res) => {
     const userID = generateRandomString();
     const email= req.body.email;
     let password = req.body.password;
+
+    const hashedPassword = bcrypt.hashSync(password, 10);
+
     const user = emailLookup(email)
     if (!email || !password) {
         return res.status(404).send()
     } else {
         if (!user) {
-            users[userID]= {'id': userID, 'email': email, 'password': password}
+            users[userID]= {'id': userID, 'email': email, 'password': hashedPassword}
             res.cookie('user_id', userID)
             res.redirect('/urls')
         } else {
@@ -259,7 +263,8 @@ function generateRandomString() {
 
 function loginCheck(email, password) {
     for (user in users) {
-        if (users[user].email === email && users[user].password === password) {
+//bcrypt.compareSync("purple-monkey-dinosaur", hashedPassword)
+        if (users[user].email === email &&  bcrypt.compareSync(password, users[user].password)) {
            return user;
         }
     }
