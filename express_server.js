@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const PORT = 8080;
 const bodyParser = require( "body-parser" );
-var cookieSession = require('cookie-session')
+const cookieSession = require('cookie-session')
 const bcrypt = require('bcrypt');
 
 app.set("view engine", "ejs");
@@ -11,7 +11,7 @@ app.use(cookieSession({
   name: 'session',
   keys: ['strings'],
 }))
-
+//Iniial database
 const urlDatabase = {
   b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
   i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
@@ -29,7 +29,9 @@ const users = {
 		password: "dishwasher-funk"
 	}
 }
-  
+
+
+//app.get: render stored in ./views/
 app.get("/", (req, res) => {
 	res.send("Hello!");
 });
@@ -56,6 +58,7 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
+	//check cookie for login, if not logged in => /login page
 	if (req.session.user_id) {
 		let templateVars = {username: req.session.email};
 		res.render("urls_new", templateVars);
@@ -106,16 +109,16 @@ app.get("/u/:id", (req, res) => {
 	res.render("urls_show", templateVars);
 });
 
+//app.post
 app.post( "/" , ( req , res ) => {
 	res.render( "urls_new" , { users : usersdb.findByName( req.body.filter ) });
 });
 
 app.post("/urls", (req, res) => {
-	if (!req.body.longURL.includes("http://")){
-		longURL = `http://${req.body.longURL}`;
-	} else {
-		longURL = req.body.longURL;
-	}
+	//ensuring http:// gets stored in the database
+	httpAdd(req.body.longURL);
+	//to be added see function duplicateCheck():
+	//check to see if URL exists, if it does, just redirect
 	const shortURLCreated = generateRandomString();
 	urlDatabase[shortURLCreated] = {
 		longURL: longURL,
@@ -136,12 +139,14 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 
 
 app.post('/urls/:shortURL/', (req, res) => {
+	
 	if (req.session.user_id === urlDatabase[req.params.shortURL].userID) {
-		urlDatabase[req.params.shortURL].longURL = req.body.longURL;
+		//ensuring http:// gets stored in the database
+		httpAdd(req.body.longURL);
+		urlDatabase[req.params.shortURL].longURL = longURL;
 	} else {
 		return res.status(403).send();
 	} 
-	
 	res.redirect('/urls')
 })
 
@@ -169,7 +174,6 @@ app.post('/register', (req,res) => {
 	let password = req.body.password;
 	const hashedPassword = bcrypt.hashSync(password, 10);
 	const user = emailLookup(email)
-
 	if (!email || !password) {
 		return res.status(404).send()
 	} else {
@@ -183,15 +187,15 @@ app.post('/register', (req,res) => {
 	}
 });
 
-
+//locahost:8080
 app.listen(PORT, () => {
 	console.log(`Example app listening on port ${PORT}!`);
 });
 
+//functions
 function generateRandomString() {
 	return Math.random().toString(36).substring(7)
 }
-
 
 function loginCheck(email, password) {
 	for (user in users) {
@@ -219,8 +223,7 @@ function urlsForUser(id) {
 	return objURL
 }
 
-//------------------------------------------------------------------
-//Function working on
+//for improvements: work on
 function urlDuplicateCheck() {
 	for (key in urlDatabase) {
 		if (urlDatabase[key] === longURL) {
@@ -230,10 +233,11 @@ function urlDuplicateCheck() {
 	}
 }
 
-function httpAdd(){
-	if (!req.body.longURL.includes("http://")){
-		longURL = `http://${req.body.longURL}`;
+function httpAdd(userURL){
+	if (!userURL.includes("http://")){
+		longURL = `http://${userURL}`;
 	} else {
-		longURL = req.body.longURL;
+		longURL = userURL;
 	}
+	return longURL;
 }
