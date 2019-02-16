@@ -7,11 +7,8 @@
       table#t01, td {
         padding-right: 20px;
         padding-left: 20px;
-
       }
-  
   </style>
-
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <title>TinyApp</title>
@@ -19,43 +16,35 @@
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
     <header>
-        <% include ./partials/_header %>
+      <% include ./partials/_header %>
     </header>
-    <!-- <h3>Create TinyURL</h3> -->
-    <h3>
-      My URLs
-    </h3>
-
-    <% if ( typeof(currentUser) == "undefined") { %>
+    <h3> My URLs </h3>
+      <% if ( typeof(currentUser) == "undefined") { %>
       <% console.log(currentUser) %>
-    <h5> Please login </h5>
-    <% } else { %>
-    <table id="t01">
-      <% for (var url in userURL){%>
-        <!-- <% if (urls[url].userID === username) { %> -->
-        <tr>
-          <td>
-            <b><%= `${url}:` %></b>
-          </td>
-          <td>
-            <a href="<%= ` ${urls[url].longURL}` %>"><%= ` ${userURL[url]}` %></a>
-          </td>
-          <td>
-            <a href="/urls/<%= url %>"> edit </a>
-          </td>
-          <td>
-            <form method="POST" action="/urls/<%= url%>/delete">
-              <button type="delete" class="btn btn-secondary">delete
-                  <span class="glyphicon glyphicon-delete"></span>
-              </button>
-            </form>
-          </td>
-        </tr>        
-        <!-- <% } %> -->
-        <% } %>
-    </table>
-    
+        <h5> Please login </h5>
+      <% } else { %>
+        <table id="t01">
+          <% for (var url in userURL){%>
+            <tr>
+              <td>
+                <b><%= `${url}:` %></b>
+              </td>
+              <td>
+                <a href="<%= ` ${urls[url].longURL}` %>"><%= ` ${userURL[url]}` %></a>
+              </td>
+              <td>
+                <a href="/urls/<%= url %>"> edit </a>
+              </td>
+              <td>
+                <form method="POST" action="/urls/<%= url%>/delete">
+                  <button type="delete" class="btn btn-secondary">delete
+                      <span class="glyphicon glyphicon-delete"></span>
+                  </button>
+                </form>
+              </td>
+            </tr>        
+            <% } %>
+        </table>
     <% } %>
-
 </body>
 </html>
